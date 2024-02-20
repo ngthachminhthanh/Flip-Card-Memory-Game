@@ -61,10 +61,11 @@ export default {
 
       this.cardsHandle.push(card);
 
-      // trường hợp 2 thẻ được lật giống nhau
+      // trường hợp 2 thẻ được lật giống nhau (khác vị trí)
       if (
         this.cardsHandle.length === 2 &&
-        this.cardsHandle[0].value === this.cardsHandle[1].value
+        this.cardsHandle[0].value === this.cardsHandle[1].value &&
+        this.cardsHandle[0].index !== this.cardsHandle[1].index
       ) {
         // thêm class 'disabled' vào component card để không cho lật nữa
         this.$refs[
@@ -88,6 +89,17 @@ export default {
             this.$emit("onFinish");
           }, 920);
         }
+      } else if (
+        this.cardsHandle.length === 2 &&
+        this.cardsHandle[0].index === this.cardsHandle[1].index
+      ) {
+        setTimeout(() => {
+          // close 2 cards
+          this.$refs[`card-${this.cardsHandle[0].index}`][0].onFlipBackCard();
+          this.$refs[`card-${this.cardsHandle[1].index}`][0].onFlipBackCard();
+          // reset cardsHandle
+          this.cardsHandle = [];
+        }, 800);
       }
       // trường hợp 2 thẻ được lật khác nhau
       else if (
